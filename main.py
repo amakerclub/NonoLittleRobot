@@ -1,16 +1,25 @@
 from servo import Servo
 from state import State
+from move import Move
 
 import sys
+import random
 
-state0 = State([])
 
 if len(sys.argv) == 2:
-	for i in range (0,6):
-		servo = Servo(i,int(sys.argv[1]))
-		state0.addServo(servo)
+	movesNo = int(sys.argv[1])
+	states = []
+	for n in range (0,movesNo):
+		state = State([])
+		for i in range (1,7):
+			if n != 0:
+				servo = Servo(i,random.randint(-90,90))
+			else:
+				servo = Servo(i,0)
+			state.addServo(servo)
+		states.append(state)
 
-	state0.move()
+Move(states).run(0.5)
 
 
 

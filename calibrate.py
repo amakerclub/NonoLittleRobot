@@ -23,15 +23,16 @@ if len(sys.argv) == 4:
 		servo.move()
 		time.sleep(1)
 		print ("Value: %d" % value)
-		value += 50
+		value += 10 #servo_max - servo_min # 50
 		#print ('Continue? Y/N')
 		#inValue = raw_input()
 		#if inValue != 'Y':
 		#	break
-
+	
+	servo_zero = int((servo_max + servo_min) / 2.0)
 	#servo = Servo(servo_num,300)
 	#servo.move()
 
-	for i in range (0,6):
-		servo = Servo(i,servo_min)
+	for i in range (1,7):
+		servo = Servo(i,servo_zero)
 		servo.move()

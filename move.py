@@ -7,9 +7,9 @@ class Move:
 		self._states = iStates
 		self._distance = None
 
-	def run(self):
+	def run(self,iSleepTime):
 		for state in self._states:
 			state.move()
-			time.sleep(2)
+			time.sleep(iSleepTime)
 
 		self._states[0].move()
