@@ -2,14 +2,27 @@ import time
 
 from state import State
 
+
 class Move:
-	def __init__(self,iStates):
-		self._states = iStates
-		self._distance = None
+    def __init__(self, iStates):
+        self._states = iStates
+        self._distance = None
 
-	def run(self,iSleepTime):
-		for state in self._states:
-			state.move()
-			time.sleep(iSleepTime)
+    def toDict(self):
+        return {'states': self._states , 'distance' : self._distance}
 
-		self._states[0].move()
+    def fromDict(self, dict):
+        self._distance  = dict('distance')
+        self.states=[]
+        for state in dict('states'):
+            self.states.append(State.fromDict(state))
+
+
+    def run(self, iSleepTime):
+        for state in self._states:
+            state.move()
+            time.sleep(iSleepTime)
+
+        self._states[0].move()
+
+
