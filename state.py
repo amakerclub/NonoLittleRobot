@@ -1,3 +1,4 @@
+import json
 from servo import Servo
 class State:
     """a State is a set of (positions of) servos"""
@@ -5,7 +6,10 @@ class State:
         self._servos = iServos
 
     def toDict(self):
-        return {'servos': self._servos.toDict() }
+        s=[]
+        for servo in self._servos:
+            s.append(servo.toDict())
+        return {'servos': s }
 
     def fromDict(self, dict):
         servos  = dict('servos')

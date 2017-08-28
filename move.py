@@ -1,15 +1,20 @@
 
 from state import State
-
+import json
 
 class Move:
+    _states=[]
+    _distance=None
     """a Move is a sequence of states."""
     def __init__(self, iStates):
         self._states = iStates
         self._distance = None
 
     def toDict(self):
-        return {'states': self._states , 'distance' : self._distance}
+        statesString=[]
+        for state in self._states:
+            statesString.append(state.toDict(   ))
+        return {'states': statesString , 'distance' : self._distance}
 
     def fromDict(self, dict):
         self._distance  = dict('distance')

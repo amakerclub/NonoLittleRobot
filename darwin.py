@@ -2,11 +2,11 @@ from servo import Servo
 from state import State
 from move import Move
 
+from StringIO import StringIO
 import sys
 import random
-import pickle
-
-
+import json
+import pprint
 class Darwin:
     """Darwin
      - creates a world of 30 random Move
@@ -19,7 +19,7 @@ class Darwin:
 
 
     def __init__(self):
-        self.world = []
+        self.world = {}
     pass
 
     def randomMove(self, statesCount):
@@ -36,18 +36,31 @@ class Darwin:
         return Move(states)
 
 
-    def createWorld(self, populationCount,statesCount, outputFile):
+    def createWorld(self, populationCount,statesCount):
         print ('createWorld: start')
         for i in range (0,populationCount):
-            self.world.append(self.randomMove(statesCount))
-        print(self.world.toDict())
-        pickle.dump(self.world,outputFile)
+            self.world[ str(i)]= self.randomMove(statesCount).toDict()
+        pprint.pprint(self.world)
+
         print ('createWorld: end')
 
+    def saveWorld(self,outputfile):
+        with open ( outputfile, 'w+') as f:
+            json.dump(d.world,f)
 
+    def loadWorld(self,inputfile):
+        with open (inputfile) as f:
+            self.world=json.load(f)
 
 if __name__ == '__main__':
     print ('Main : start')
     d =Darwin()
-    d.createWorld ( int(sys.argv[1]), int(sys.argv[2]), sys.argv[3])
+
+    #with open('./test','w+') as f:
+    #    json.dump(d.randomMove(3).toDict(),f)
+    d.createWorld ( int(sys.argv[1]), int(sys.argv[2]))
+    d.saveWorld(sys.argv[3])
+    d.loadWorld(sys.argv[3])
+    pprint.pprint(d.world)
+
     print ('Main : end')
