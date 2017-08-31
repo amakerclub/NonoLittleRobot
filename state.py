@@ -3,6 +3,10 @@ class State:
     """a State is a set of (positions of) servos"""
     def __init__(self, iServos):
         self._servos = iServos
+        
+    @property
+    def servos(self):
+        return self._servos
 
     def toDict(self):
         return {'servos': self._servos.toDict() }
