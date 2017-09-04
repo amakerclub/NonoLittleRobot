@@ -7,6 +7,14 @@ class Servo:
     def __init__(self,iId,iPosition):
         self._id = iId
         self._position = iPosition
+        
+    @property
+    def id(self):
+        return self._id
+    
+    @property
+    def position(self):
+        return self._position
 
     def toDict(self):
         return {'id': self._id , 'position' : self._position }
