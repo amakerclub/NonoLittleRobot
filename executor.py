@@ -1,7 +1,11 @@
 
+
 # Import the PCA9685 module.
 import Adafruit_PCA9685
 import time
+
+
+import gpioController
 
 
 pwm = Adafruit_PCA9685.PCA9685()
@@ -33,4 +37,21 @@ class Executor:
                 pwm.set_pwm(self._id, 0, aServoPosition)
             time.sleep(self._sleepTime)
         #TODO : update movement with its score
-        return movement
+
+        try:
+
+            print ("First measure...")
+            dist = gpioController.calculateDistance()
+            print ("Done")
+            time.sleep(1)
+            print ("Avg. measure...")
+            distAvg = gpioController.calculateAverageDistance(10,1)
+            print ("Done")
+            print ("Measured Distance = %.1f cm (%.1f cm)" % (dist,distAvg))
+            time.sleep(1)
+            return distAvg
+
+            # Reset by pressing CTRL + C
+        except KeyboardInterrupt:
+            print("Measurement stopped by User")
+        #GPIO.cleanup()
