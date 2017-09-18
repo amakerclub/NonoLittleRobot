@@ -24,7 +24,7 @@ class Darwin:
 
     def __init__(self):
         self.world = {}
-        self.executor = Executor
+        self.executor = Executor(1)
     pass
 
     def randomMove(self, statesCount):
@@ -44,7 +44,7 @@ class Darwin:
     def createWorld(self, populationCount,statesCount):
         print ('createWorld: start')
         for i in range (0,populationCount):
-            self.world[ str(i)]= self.randomMove(statesCount).toDict()
+            self.world[ str(i)]= self.randomMove(statesCount)#.toDict()
         pprint.pprint(self.world)
 
         print ('createWorld: end')
@@ -59,21 +59,27 @@ class Darwin:
 
     def darwinLoop(self, maxLoops, parentCount=4, parentKept=2):
         ### Loop on world, evaluate n parents, keep only m best ones and replace others by evolution from kept best ones
-        i = 0
-        while (i < maxLoops):
+        j = 0
+        print "darwin loop started"
+        while (j < maxLoops):
+            print "darwin in the while loop"
             ### Store best Move and distance
             bestDistance = 0
             bestMove = 0
 
-            evalMoves = random.sample(self.world,parentCount)
 
-            for i in evalMoves (0,self.world):
-                movedDistance = self.executor(self.world[i])
-                print ("Move %d" %i)
+            evalMoves = random.sample(self.world,parentCount)
+            print "darwin after evalmoves"
+
+            for i in evalMoves:
+                print "darwin in the for loop"
+                movedDistance = self.executor.run(self.world[i])
+                print "Executor done"
+                ### print ("Move %d" %i)
                 if (movedDistance > bestDistance):
                     bestDistance = movedDistance
                     bestMove = self.world[i]
-            i+=1
+            j+=1
 
 
 if __name__ == '__main__':
@@ -82,7 +88,7 @@ if __name__ == '__main__':
     #with open('./test','w+') as f:
     #    json.dump(d.randomMove(3).toDict(),f)
     d.createWorld ( int(sys.argv[1]), int(sys.argv[2]))
-    d.darwinLoop(1)
+    d.darwinLoop(2)
     d.saveWorld(sys.argv[3])
     #d.loadWorld(sys.argv[3])
 
