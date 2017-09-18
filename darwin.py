@@ -68,18 +68,23 @@ class Darwin:
             bestMove = 0
 
 
-            evalMoves = random.sample(self.world,parentCount)
+            evalMoves = random.sample(range (0, len(self.world)), parentCount)
+            print "evalMoves="
+            print evalMoves
             print "darwin after evalmoves"
 
             for i in evalMoves:
                 print "darwin in the for loop"
-                movedDistance = self.executor.run(self.world[i])
+                print self.world
+                print self.world[str(i)]
+                if ( self.world[str(i)]._distance is None ):
+                    self.world[str(i)]._distance= self.executor.run(self.world[str(i)])
                 print "Executor done"
-                ### print ("Move %d" %i)
-                if (movedDistance > bestDistance):
-                    bestDistance = movedDistance
-                    bestMove = self.world[i]
-            j+=1
+            # sort evalMoves, keep 2 bests, replace 2 worsts by children of 2 best
+            print "evalMovesSorted="
+            evalMovesSorted=sorted(evalMoves, key=lambda i:self.world[str(i)].distance())
+            print evalMovesSorted
+        j+=1
 
 
 if __name__ == '__main__':

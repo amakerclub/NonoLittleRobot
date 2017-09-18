@@ -39,7 +39,7 @@ class Executor:
 
                 pwm.set_pwm(servo.id, 0, aServoPosition)
             time.sleep(self._sleepTime)
-        #TODO : update movement with its score
+
 
         try:
 
@@ -57,4 +57,5 @@ class Executor:
             # Reset by pressing CTRL + C
         except KeyboardInterrupt:
             print("Measurement stopped by User")
+
         #GPIO.cleanup()
