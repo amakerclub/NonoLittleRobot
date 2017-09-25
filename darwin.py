@@ -1,6 +1,7 @@
 from servo import Servo
 from state import State
 from move import Move
+from evolution import Evolution
 from executor import Executor
 
 from StringIO import StringIO
@@ -24,7 +25,7 @@ class Darwin:
 
     def __init__(self):
         self.world = {}
-        self.executor = Executor(1)
+        self.executor = Executor(0.4)
     pass
 
     def randomMove(self, statesCount):
@@ -80,10 +81,25 @@ class Darwin:
                 if ( self.world[str(i)]._distance is None ):
                     self.world[str(i)]._distance= self.executor.run(self.world[str(i)])
                 print "Executor done"
-            # sort evalMoves, keep 2 bests, replace 2 worsts by children of 2 best
+            # sort evalMoves
             print "evalMovesSorted="
-            evalMovesSorted=sorted(evalMoves, key=lambda i:self.world[str(i)].distance())
+            evalMovesSorted=sorted(evalMoves, key=lambda i:self.world[str(i)]._distance)
             print evalMovesSorted
+
+            #keep 2 bests (2 last)
+            # We dont need to do anything to keep them...
+
+            # replace 2 worsts by children of 2 best ==> Verify the content of simpleCrossover execution
+            e = Evolution()
+            print ("CrossingOver : ")
+            print (str(self.world[str(evalMovesSorted[0])]))
+            print (str(self.world[str(evalMovesSorted[1])]))
+            e.simpleCrossover(self.world[str(evalMovesSorted[0])], self.world[str(evalMovesSorted[1])])
+            print ("CrossOver result : ")
+            print (str(self.world[str(evalMovesSorted[0])]))
+            print (str(self.world[str(evalMovesSorted[1])]))
+
+
         j+=1
 
 

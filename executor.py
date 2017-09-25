@@ -26,6 +26,17 @@ class Executor:
         Physical execution of movement
         :param Move movement: Movement to be executed
         """
+
+        try:
+            print ("Measure distance before moving")
+            avgDistBefore = gpioController.calculateAverageDistance(4,0.1)
+            print avgDistBefore
+
+        # Reset by pressing CTRL + C
+        except KeyboardInterrupt:
+            print("Measurement stopped by User")
+
+
         for state in movement.states:
             for servo in state.servos:
                 aServoPosition = int((((servo.position + 90.0) / 180.0) * (servo_max - servo_min)) + servo_min)
@@ -40,22 +51,17 @@ class Executor:
                 pwm.set_pwm(servo.id, 0, aServoPosition)
             time.sleep(self._sleepTime)
 
-
         try:
+            print ("Measure distance after moving")
+            avgDistAfter = gpioController.calculateAverageDistance(4,0.1)
+            print avgDistAfter
 
-            print ("First measure...")
-            dist = gpioController.calculateDistance()
-            print ("Done")
-            time.sleep(1)
-            print ("Avg. measure...")
-            distAvg = gpioController.calculateAverageDistance(10,1)
-            print ("Done")
-            print ("Measured Distance = %.1f cm (%.1f cm)" % (dist,distAvg))
-            time.sleep(1)
-            return distAvg
-
-            # Reset by pressing CTRL + C
+        # Reset by pressing CTRL + C
         except KeyboardInterrupt:
             print("Measurement stopped by User")
+
+        print (avgDistAfter - avgDistBefore)
+
+        return (avgDistAfter - avgDistBefore)
 
         #GPIO.cleanup()
