@@ -14,14 +14,33 @@ class Evolution:
         nbStates = len(moveA._states)
         crossoverIndex = random.randrange(1, nbStates -2)
         print crossoverIndex
+        A = Move(moveA._states[:crossoverIndex] + moveB._states[crossoverIndex:])
+        B = Move(moveB._states[:crossoverIndex] + moveA._states[crossoverIndex:])
 
-        tempStates = moveB._states[:crossoverIndex] + moveA._states[crossoverIndex:]
+        return (A, B)
 
-        moveA._states = moveA._states[:crossoverIndex] + moveB._states[crossoverIndex:]
-        moveA._distance=None
-        moveB._states = tempStates
-        moveB._distance=None
+    def mutation(self, mutationProbability, maxMutationRange, moveToMutate):
+        # Mutate each position in moveToMuate with at most the maxMutationRange
+        # with the likelihood mutationProbability
 
+        #mutationProbability should be between 0 and 1 (100% chance)
+        #maxMutationRange is a position increment (e.g. 20)
+
+        mutatedMove = moveToMutate
+
+        for state in mutatedMove._states:
+            for servo in state._servos:
+                if random.randrange(0,1) < mutationProbability:
+
+                    mutationDirection = 1
+
+                    if (random.randRange(0,1) < 0.5):
+                        mutationDirection = -mutationDirection
+
+                    mutationStep = int(random.randrange(0, maxMutationRange) * mutationDirection)
+                    servo._position = servo._position + mutationStep
+
+        return mutatedMove
 
 
     # def meyoseByState(self,moveA, moveB):

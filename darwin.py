@@ -63,18 +63,18 @@ class Darwin:
         j = 0
         print "darwin loop started"
         while (j < maxLoops):
-            print "darwin in the while loop"
+            print "--- Darwin in the while loop "+str(j)
             ### Store best Move and distance
             bestDistance = 0
             bestMove = 0
 
 
-            evalMoves = random.sample(range (0, len(self.world)), parentCount)
+            evalMovesIndexes = random.sample(range (0, len(self.world)), parentCount)
             print "evalMoves="
-            print evalMoves
+            print evalMovesIndexes
             print "darwin after evalmoves"
 
-            for i in evalMoves:
+            for i in evalMovesIndexes:
                 print "darwin in the for loop"
                 print self.world
                 print self.world[str(i)]
@@ -83,7 +83,7 @@ class Darwin:
                 print "Executor done"
             # sort evalMoves
             print "evalMovesSorted="
-            evalMovesSorted=sorted(evalMoves, key=lambda i:self.world[str(i)]._distance)
+            evalMovesSorted=sorted(evalMovesIndexes, key=lambda i:self.world[str(i)]._distance)
             print evalMovesSorted
 
             #keep 2 bests (2 last)
@@ -91,28 +91,36 @@ class Darwin:
 
             # replace 2 worsts by children of 2 best ==> Verify the content of simpleCrossover execution
             e = Evolution()
-            print ("CrossingOver : ")
-            print (str(self.world[str(evalMovesSorted[0])]))
-            print (str(self.world[str(evalMovesSorted[1])]))
-            e.simpleCrossover(self.world[str(evalMovesSorted[0])], self.world[str(evalMovesSorted[1])])
+            print ("CrossingOver : last and last-1")
+            pprint.pprint(str(self.world[str(evalMovesSorted[-1])]))
+            pprint.pprint(str(self.world[str(evalMovesSorted[-2])]))
             print ("CrossOver result : ")
-            print (str(self.world[str(evalMovesSorted[0])]))
-            print (str(self.world[str(evalMovesSorted[1])]))
+            (A,B) = e.simpleCrossover(self.world[str(evalMovesSorted[-1])], self.world[str(evalMovesSorted[-2])])
 
+            # Uncomment to use mutation (NOT TESTED YET)
+            # A = mutation(0.05, 10, A)
+            # B = mutation(0.05, 10, B)
 
-        j+=1
+            self.world[str(evalMovesSorted[0])] = A
+            self.world[str(evalMovesSorted[1])] = B
+
+            pprint.pprint(str(self.world[str(evalMovesSorted[0])]))
+            pprint.pprint (str(self.world[str(evalMovesSorted[1])]))
+
+            j+=1
 
 
 if __name__ == '__main__':
     print ('Main : start')
     d =Darwin()
+    print ('Arguments : loopCount populationCount statesPerMoveCount fileName')
     #with open('./test','w+') as f:
     #    json.dump(d.randomMove(3).toDict(),f)
-    d.createWorld ( int(sys.argv[1]), int(sys.argv[2]))
-    d.darwinLoop(2)
-    d.saveWorld(sys.argv[3])
-    #d.loadWorld(sys.argv[3])
+    d.createWorld ( int(sys.argv[2]), int(sys.argv[3]))
+    d.darwinLoop(1)
+    #d.saveWorld(sys.argv[4])
+    #d.loadWorld(sys.argv[4])
 
-    #pprint.pprint(d.world)
+    pprint.pprint(d.world)
 
     print ('Main : end')
